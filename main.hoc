@@ -4,11 +4,11 @@ cvode.atol(0.00001)
 cvode.condition_order(2)
 wopen("Dbl_Taper_20uDF.txt") //output 26,36,44
 
-xopen("params.hoc")
-xopen("geometry.hoc")
-xopen("initialize.hoc")
-xopen("stim.hoc")
-xopen("record.hoc")
+xopen("1_params.hoc")
+xopen("2_geometry.hoc")
+xopen("3_initialize.hoc")
+xopen("4_stim.hoc")
+xopen("5_record.hoc")
 
 xo=20.00
 xf=20.00

@@ -1,7 +1,7 @@
-// create the nodes
+// create the sections
 create node[Nnode],mysaleft[Nmysa],mysaright[Nmysa],flut[Nflut],stin[Nstin],soma,mysaextra[NmysaSec]
 
-//connect the links now
+//connect the nodes
 connect mysaextra[0](0), soma(1)
 for l=0,NmysaSec-2 {
     connect mysaextra[l+1](0),mysaextra[l](1)
