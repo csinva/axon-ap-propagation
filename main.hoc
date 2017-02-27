@@ -2,7 +2,7 @@ load_file("nrngui.hoc")
 cvode_active(1)
 cvode.atol(0.00001)
 cvode.condition_order(2)
-wopen("Dbl_Taper_20uDF.dat")
+wopen("Dbl_Taper_20uDF.txt")
 
 Dn=.1
 Df=20
@@ -249,6 +249,6 @@ for xind=0,xmax{
 }
 ////end x loop (Fiber loop)
 
-wopen()
+//wopen()
 
 
