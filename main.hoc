@@ -50,41 +50,8 @@ kg=kg_per_ch*Pot/(PI*Lflut*Dax*10^-8)
 
 v_init=-85
 
-create node[Nnode],mysaleft[Nmysa],mysaright[Nmysa],flut[Nflut],stin[Nstin],soma,mysaextra[NmysaSec]
+xopen("geometry.hoc")
 
-//connect the links now
-
-connect mysaextra[0](0), soma(1)
-for l=0,NmysaSec-2 {
-connect mysaextra[l+1](0),mysaextra[l](1)
-}
-connect node[0](0),mysaextra[NmysaSec-1](1)
-for k=0,Send {
-connect mysaleft[NmysaSec*k](0),node[k](1)
-connect mysaleft[NmysaSec*k+1](0),mysaleft[NmysaSec*k](1)
-connect mysaleft[NmysaSec*k+2](0),mysaleft[NmysaSec*k+1](1)
-connect mysaleft[NmysaSec*k+3](0), mysaleft[NmysaSec*k+2](1)
-connect mysaleft[NmysaSec*k+4](0), mysaleft[NmysaSec*k+3](1)
-connect mysaleft[NmysaSec*k+5](0), mysaleft[NmysaSec*k+4](1)
-connect mysaleft[NmysaSec*k+6](0), mysaleft[NmysaSec*k+5](1)
-connect mysaleft[NmysaSec*k+7](0), mysaleft[NmysaSec*k+6](1)
-connect mysaleft[NmysaSec*k+8](0), mysaleft[NmysaSec*k+7](1)
-connect mysaleft[NmysaSec*k+9](0), mysaleft[NmysaSec*k+8](1)
-connect flut[2*k](0), mysaleft[NmysaSec*k+9](1)
-connect stin[k](0), flut[2*k](1)
-connect flut[2*k+1](0), stin[k](1)
-connect mysaright[NmysaSec*k](0), flut[2*k+1](1)
-connect mysaright[NmysaSec*k+1](0), mysaright[NmysaSec*k](1)
-connect mysaright[NmysaSec*k+2](0), mysaright[NmysaSec*k+1](1)
-connect mysaright[NmysaSec*k+3](0), mysaright[NmysaSec*k+2](1)
-connect mysaright[NmysaSec*k+4](0), mysaright[NmysaSec*k+3](1)
-connect mysaright[NmysaSec*k+5](0), mysaright[NmysaSec*k+4](1)
-connect mysaright[NmysaSec*k+6](0), mysaright[NmysaSec*k+5](1)
-connect mysaright[NmysaSec*k+7](0), mysaright[NmysaSec*k+6](1)
-connect mysaright[NmysaSec*k+8](0), mysaright[NmysaSec*k+7](1)
-connect mysaright[NmysaSec*k+9](0), mysaright[NmysaSec*k+8](1)
-connect node[k+1](0), mysaright[NmysaSec*k+9](1)
-}
 proc initialize(){
 		soma {
 			L=Lsoma
@@ -152,7 +119,7 @@ proc initialize(){
 
 		for h=0,Send {
 			for k=0,kmax mysaright[NmysaSec*h+k] {
-		insert pas
+		        insert pas
 				L=mysaDL
 				Dout=(Df-Dn)*cos(L*(k)*PI/(2*Lmysa))+Dn
 				Din=Dn*exp(((kmax-k)/(kmax))*log(Dax/Dn))	
