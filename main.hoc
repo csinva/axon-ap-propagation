@@ -2,202 +2,20 @@ load_file("nrngui.hoc")
 cvode_active(1)
 cvode.atol(0.00001)
 cvode.condition_order(2)
-wopen("Dbl_Taper_20uDF.txt")
+wopen("Dbl_Taper_20uDF.txt") //output 26,36,44
 
-Dn=.1
-Df=20
-Dax=0.66604*Df-0.42879	
-ratio=Dn/Dax			 							 							 							 							
-tml=.018
-nl=(Df-Dax)/(2*tml)
-eo=8.8541878178*10^-12*10000/.0001 //(  *10000 --> convert to mF/cm*1/cm)
-er=10
-celsius=37
-
-sections=30																																								//		Number of Internodes
-Send=sections-1
-Nnode=sections+1
-NmysaSec=10
-Nmysa=sections*NmysaSec
-Nflut=sections*2
-Nstin=sections
-
-Lmysa=4
-Lflut=75
-Lnode=1
-Lsection=1000
-Lstin=Lsection-(Lnode+2*Lflut+2*Lmysa)
-Lsoma=Lstin
-
-rhoa=70
-
-g_nl=.002
-passiveg=g_nl/(2*nl)
-
-cm_n=1.0
-cm_my=2*eo*er/( Df*log(Df/Dax))
-c_nl=cm_my*(nl)
-passivecm=cm_my/(1+cm_my*Df/(cm_n*Dax))
-bh=Dn*.32406*exp(-0.39509*Dn)*0.0
-
-Sod=20000
-nag_per_ch=20*10^-12
-nag=nag_per_ch*Sod/(PI*Lnode*(Dn+bh)*10^-8) // ( 10^-8 ---> convert to /cm^2)
-
-Pot=250
-kg_per_ch=nag_per_ch
-kg=kg_per_ch*Pot/(PI*Lflut*Dax*10^-8)
-
-v_init=-85
-
+xopen("params.hoc")
 xopen("geometry.hoc")
-
-proc initialize(){
-		soma {
-			L=Lsoma
-			diam=Df
-			insert pas
-			g_pas=passiveg
-			e_pas=v_init
-			Ra=rhoa*(1/(Dax/Df)^2)
-			cm=passivecm
-			nseg = 5
-		}
-
-		for i=0,Nnode-1 node[i]{
-			diam=(Dn+bh)
-			L=Lnode
-			cm=cm_n
-			Ra=rhoa
-			insert axnode75
-			gnapbar_axnode75=0.00		
-			gnabar_axnode75=nag		
-			gkbar_axnode75=0.0
-			nseg = 1
-		}
-
-		mysaddin=(Dax-Dn)/(NmysaSec)
-		mysaddout=(Df-Dn)/(NmysaSec)
-		mysaDL=(Lmysa)/NmysaSec
-
-		kmax=NmysaSec-1
-		for k=0,kmax mysaextra[k] {
-				insert pas
-				L=mysaDL
-				Dout=(Df-Dn)*cos(L*(k)*PI/(2*Lmysa))+Dn
-				Din=Dn*exp(((kmax-k)/(kmax))*log(Dax/Dn))		
-				diam=Dout
-				delta=abs(Dout-Din)/2
-				nnl=delta/(tml)
-				if(nnl<=0){nnl=1}
-				cm=2*eo*er/( Dout*log(Dout/Din))
-				cm=cm/(1+cm*Dout/(cm_n*Din))
-				g_pas=g_nl/(2*nnl)
-				e_pas=v_init
-				Ra=rhoa*(1/(Din/Dout)^2)
-				nseg = 1
-				}
-
-		for h=0,Send {
-			for k=0,kmax mysaleft[NmysaSec*h+k] {
-				insert pas
-				L=mysaDL
-				Dout=(Df-Dn)*sin(L*(k+1)*PI/(2*Lmysa))+Dn
-				Din=Dn*exp(((k)/(kmax))*log(Dax/Dn))	
-				diam=Dout
-				delta=abs(Dout-Din)/2
-				nnl=delta/(tml)
-				if(nnl<=0){nnl=1}
-				cm=2*eo*er/( Dout*log(Dout/Din))
-				cm=cm/(1+cm*Dout/(cm_n*Din))
-				g_pas=g_nl/(2*nnl)
-				e_pas=v_init
-				Ra=rhoa*(1/(Din/Dout)^2)
-				nseg = 1
-				}
-		}
-
-		for h=0,Send {
-			for k=0,kmax mysaright[NmysaSec*h+k] {
-		        insert pas
-				L=mysaDL
-				Dout=(Df-Dn)*cos(L*(k)*PI/(2*Lmysa))+Dn
-				Din=Dn*exp(((kmax-k)/(kmax))*log(Dax/Dn))	
-				diam=Dout
-				delta=abs(Dout-Din)/2
-				nnl=delta/(tml)
-				if(nnl<=0){nnl=1}
-				cm=2*eo*er/( Dout*log(Dout/Din))
-				cm=cm/(1+cm*Dout/(cm_n*Din))
-				g_pas=g_nl/(2*nnl)
-				e_pas=v_init
-				Ra=rhoa*(1/(Din/Dout)^2)
-				nseg = 1
-				}
-		}
-
-		for l=0,Nflut-1 flut[l]{
-			L=Lflut
-			diam=Df
-			insert pas
-			g_pas=passiveg
-			cm=passivecm
-			e_pas=v_init
-			Ra=rhoa*(1/(Dax/Df)^2)
-	
-			insert parak75
-			gkbar_parak75=kg*(Dax/Df)
-			nseg = 1
-		}
-
-		for w=0,Nstin-1 stin[w] {
-			L=Lstin
-			diam=Df
-			insert pas
-			g_pas=passiveg
-			cm=passivecm
-			e_pas=v_init
-			Ra=rhoa*(1/(Dax/Df)^2)
-			nseg = 5
-		}
-
-finitialize(v_init)
-fcurrent()
-}
-initialize()
-
-//intracellular stimulus//
-objectvar stim
-istim=10				
-delay=1				
-pw=0.5
-proc stimul() {
-	node[0]{
-		stim=new IClamp()
-		stim.loc(.5)
-		stim.del=delay
-		stim.dur=pw
-		stim.amp=istim
-		}
-}
-stimul()
-
-tstop=delay+5
-// Record from nodes from injection site
-objref null
-objref nc[Nnode], apt[Nnode]
-for i=0,Nnode-1 {
-    node[i] nc[i] = new NetCon(&v(0.5), null, -40, 0, 0)
-    apt[i] = new Vector()               // Action potential times
-    nc[i].record(apt[i])
-}
+xopen("initialize.hoc")
+xopen("stim.hoc")
+xopen("record.hoc")
 
 xo=20.00
 xf=20.00
 dx=.25
 xmax=(xf-xo)/dx
 secondorder=2
-for xind=0,xmax{
+for xind=0,xmax{ // Fiber loop
 
 	Df=xo+xind*dx
 	Dax=0.66604*Df-0.42879
@@ -208,47 +26,41 @@ for xind=0,xmax{
 	c_nl=passivecm*(nl)
 	kg=kg_per_ch*Pot/(PI*Lflut*Dax*10^-8)
 
-			yo=.2
-			dy=.1
-			yf=Dax+dy*2
-			ymax=(yf-yo)/dy
+    yo=.2
+    dy=.1
+    yf=Dax+dy*2
+    ymax=(yf-yo)/dy
 
-			for yind=0,ymax {
+    for yind=0,ymax { // Node loop
 
-				Dn=yo+yind*dy
+        Dn=yo+yind*dy
 
-				bh=Dn*.32406*exp(-0.39509*Dn)*0.0
-				ratio=Dn/Dax
-				nag=nag_per_ch*Sod/(PI*Lnode*Dn*10^-8)
+        bh=Dn*.32406*exp(-0.39509*Dn)*0.0
+        ratio=Dn/Dax
+        nag=nag_per_ch*Sod/(PI*Lnode*Dn*10^-8)
 
-				initialize()
-				stimul()
-				run() 
+        // run simulation
+        initialize()
+        stimul()
+        run()
 
-				time10=apt[9].x(0)
-				time20=apt[19].x(0)
-	
-				if(time20 > time10){
-				Avg1= (19-9)*Lsection/((time20-time10)*1000)
-				}
-		
-				if(time20 <= time10){
-					Avg1= 0
-				}
-				////end y loop (Node loop)	
-				if(Avg1>0){
-//					fprint("%f %f %f %f %f %f %f %f %f %f\n",Dn,Dax,nl*(2*tml),Df,Lsection,9*Lsection,time20-time10,Avg1,nag,kg)
-//					printf("%f %f %f %f %f %f %f %f %f %f\n",Dn,Dax,nl*(2*tml),Df,Lsection,9*Lsection,time20-time10,Avg1,nag,kg)
+        time10=apt[9].x(0)
+        time20=apt[19].x(0)
 
-					fprint("%f %f %f %f %f\n",Dn,Dax,Avg1,nag,kg)
-					printf("%f %f %f %f %f\n",Dn,Dax,Avg1,nag,kg)
-				}
-			}
+        if(time20 > time10){
+            Avg1= (19-9)*Lsection/((time20-time10)*1000)
+        }
 
+        if(time20 <= time10){
+            Avg1= 0
+        }
 
+        if(Avg1>0){
+            //fprint("%f %f %f %f %f %f %f %f %f %f\n",Dn,Dax,nl*(2*tml),Df,Lsection,9*Lsection,time20-time10,Avg1,nag,kg)
+            //printf("%f %f %f %f %f %f %f %f %f %f\n",Dn,Dax,nl*(2*tml),Df,Lsection,9*Lsection,time20-time10,Avg1,nag,kg)
+            fprint("%f %f %f %f %f\n",Dn,Dax,Avg1,nag,kg)
+            printf("%f %f %f %f %f\n",Dn,Dax,Avg1,nag,kg)
+        }
+    }
 }
-////end x loop (Fiber loop)
-
-//wopen()
-
 

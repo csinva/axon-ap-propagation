@@ -1,0 +1,8 @@
+// Record from nodes from injection site
+objref null
+objref nc[Nnode], apt[Nnode]
+for i=0,Nnode-1 {
+    node[i] nc[i] = new NetCon(&v(0.5), null, -40, 0, 0)
+    apt[i] = new Vector()               // Action potential times
+    nc[i].record(apt[i])
+}

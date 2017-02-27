@@ -1,0 +1,111 @@
+proc initialize(){
+		soma {
+			L=Lsoma
+			diam=Df
+			insert pas
+			g_pas=passiveg
+			e_pas=v_init
+			Ra=rhoa*(1/(Dax/Df)^2)
+			cm=passivecm
+			nseg = 5
+		}
+
+		for i=0,Nnode-1 node[i]{
+			diam=(Dn+bh)
+			L=Lnode
+			cm=cm_n
+			Ra=rhoa
+			insert axnode75
+			gnapbar_axnode75=0.00
+			gnabar_axnode75=nag
+			gkbar_axnode75=0.0
+			nseg = 1
+		}
+
+		mysaddin=(Dax-Dn)/(NmysaSec)
+		mysaddout=(Df-Dn)/(NmysaSec)
+		mysaDL=(Lmysa)/NmysaSec
+
+		kmax=NmysaSec-1
+		for k=0,kmax mysaextra[k] {
+				insert pas
+				L=mysaDL
+				Dout=(Df-Dn)*cos(L*(k)*PI/(2*Lmysa))+Dn
+				Din=Dn*exp(((kmax-k)/(kmax))*log(Dax/Dn))
+				diam=Dout
+				delta=abs(Dout-Din)/2
+				nnl=delta/(tml)
+				if(nnl<=0){nnl=1}
+				cm=2*eo*er/( Dout*log(Dout/Din))
+				cm=cm/(1+cm*Dout/(cm_n*Din))
+				g_pas=g_nl/(2*nnl)
+				e_pas=v_init
+				Ra=rhoa*(1/(Din/Dout)^2)
+				nseg = 1
+				}
+
+		for h=0,Send {
+			for k=0,kmax mysaleft[NmysaSec*h+k] {
+				insert pas
+				L=mysaDL
+				Dout=(Df-Dn)*sin(L*(k+1)*PI/(2*Lmysa))+Dn
+				Din=Dn*exp(((k)/(kmax))*log(Dax/Dn))
+				diam=Dout
+				delta=abs(Dout-Din)/2
+				nnl=delta/(tml)
+				if(nnl<=0){nnl=1}
+				cm=2*eo*er/( Dout*log(Dout/Din))
+				cm=cm/(1+cm*Dout/(cm_n*Din))
+				g_pas=g_nl/(2*nnl)
+				e_pas=v_init
+				Ra=rhoa*(1/(Din/Dout)^2)
+				nseg = 1
+				}
+		}
+
+		for h=0,Send {
+			for k=0,kmax mysaright[NmysaSec*h+k] {
+		        insert pas
+				L=mysaDL
+				Dout=(Df-Dn)*cos(L*(k)*PI/(2*Lmysa))+Dn
+				Din=Dn*exp(((kmax-k)/(kmax))*log(Dax/Dn))
+				diam=Dout
+				delta=abs(Dout-Din)/2
+				nnl=delta/(tml)
+				if(nnl<=0){nnl=1}
+				cm=2*eo*er/( Dout*log(Dout/Din))
+				cm=cm/(1+cm*Dout/(cm_n*Din))
+				g_pas=g_nl/(2*nnl)
+				e_pas=v_init
+				Ra=rhoa*(1/(Din/Dout)^2)
+				nseg = 1
+				}
+		}
+
+		for l=0,Nflut-1 flut[l]{
+			L=Lflut
+			diam=Df
+			insert pas
+			g_pas=passiveg
+			cm=passivecm
+			e_pas=v_init
+			Ra=rhoa*(1/(Dax/Df)^2)
+
+			insert parak75
+			gkbar_parak75=kg*(Dax/Df)
+			nseg = 1
+		}
+
+		for w=0,Nstin-1 stin[w] {
+			L=Lstin
+			diam=Df
+			insert pas
+			g_pas=passiveg
+			cm=passivecm
+			e_pas=v_init
+			Ra=rhoa*(1/(Dax/Df)^2)
+			nseg = 5
+		}
+    finitialize(v_init)
+    fcurrent()
+}
