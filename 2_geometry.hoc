@@ -1,5 +1,13 @@
 // create the sections
 create node[Nnode],mysaleft[Nmysa],mysaright[Nmysa],flut[Nflut],stin[Nstin],soma,mysaextra[NmysaSec]
+// node - node = NODE
+// mysa - myelin sheath attachment = PARA (paranode)
+// flut - fluted region = JUXTA (juxtaparanode)
+// stin - stereotyped internode = INTER (internode)
+
+// repeating pattern
+// starts: soma - PARA - JUXTA - INTER
+// INTER - JUXTA - PARA - NODE - PARA - JUXTA - INTER
 
 //connect the nodes
 connect mysaextra[0](0), soma(1)
