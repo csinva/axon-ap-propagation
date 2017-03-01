@@ -1,17 +1,32 @@
 {load_file("nrngui.hoc")}
 objectvar save_window_, rvp_
-objectvar scene_vector_[3]
+objectvar scene_vector_[4]
 objectvar ocbox_, ocbox_list_, scene_, scene_list_
 {ocbox_list_ = new List()  scene_list_ = new List()}
 {pwman_place(0,0,0)}
 {
 save_window_ = new Graph(0)
-save_window_.size(-5.96046e-08,6,-80,40)
+save_window_.size(0.5,3.5,-80,50)
 scene_vector_[2] = save_window_
-{save_window_.view(-5.96046e-08, -80, 6, 120, 16, 112, 300.48, 200.32)}
+{save_window_.view(0.5, -80, 3, 130, 5, 115, 671.04, 327.04)}
 graphList[0].append(save_window_)
 save_window_.save_name("graphList[0].")
-save_window_.addexpr("v(.5)", 1, 1, 0.8, 0.9, 2)
+save_window_.addexpr("node[0].v( 0.5 )", 1, 1, 0.8, 0.9, 2)
+save_window_.addexpr("node[5].v( 0.5 )", 6, 1, 0.8, 0.9, 2)
+save_window_.addexpr("node[10].v( 0.5 )", 2, 1, 0.8, 0.9, 2)
+save_window_.addexpr("node[15].v( 0.5 )", 5, 1, 0.8, 0.9, 2)
+save_window_.addexpr("node[20].v( 0.5 )", 4, 1, 0.8, 0.9, 2)
+save_window_.addexpr("node[25].v(0.5)", 9, 1, 0.8, 0.9, 2)
+}
+{
+save_window_ = new Graph(0)
+save_window_.size(-5.96046e-08,6,-80,40)
+scene_vector_[3] = save_window_
+{save_window_.view(1.5, -80, 1.5, 120, 8, 510, 669.12, 295.36)}
+graphList[0].append(save_window_)
+save_window_.save_name("graphList[0].")
+save_window_.addexpr("node[15].v( 0.5 )", 5, 1, 0.8, 0.9, 2)
+save_window_.addexpr("node[20].v( 0.5 )", 4, 1, 0.8, 0.9, 2)
 }
 objectvar scene_vector_[1]
 {doNotify()}
