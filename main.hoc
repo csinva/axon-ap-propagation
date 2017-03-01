@@ -9,58 +9,67 @@ xopen("2_geometry.hoc")
 xopen("3_initialize.hoc")
 xopen("4_stim.hoc")
 xopen("5_record.hoc")
-
+xopen ("act.ses")
 xo=20.00
 xf=20.00
 dx=.25
 xmax=(xf-xo)/dx
 secondorder=2
-for xind=0,xmax{ // Fiber loop
 
-	Df=xo+xind*dx
-	Dax=0.66604*Df-0.42879
-	nl=(Df-Dax)/(2*tml)
-	passiveg=g_nl/(2*nl)
-	cm_my=2*eo*er/( Df*log(Df/Dax))
-	passivecm=cm_my/(1+cm_my*Df/(cm_n*Dax))
-	c_nl=passivecm*(nl)
-	kg=kg_per_ch*Pot/(PI*Lflut*Dax*10^-8)
+proc run_act(){
+    initialize()
+    stimul()
+    run()
+}
 
-    yo=.2
-    dy=.1
-    yf=Dax+dy*2
-    ymax=(yf-yo)/dy
+run_act()
 
-    for yind=0,ymax { // Node loop
+proc run_loop(){
+    for xind=0,xmax{ // Fiber loop
+        Df=xo+xind*dx
+        Dax=0.66604*Df-0.42879
+        nl=(Df-Dax)/(2*tml)
+        passiveg=g_nl/(2*nl)
+        cm_my=2*eo*er/( Df*log(Df/Dax))
+        passivecm=cm_my/(1+cm_my*Df/(cm_n*Dax))
+        c_nl=passivecm*(nl)
+        kg=kg_per_ch*Pot/(PI*Lflut*Dax*10^-8)
 
-        Dn=yo+yind*dy
+        yo=.2
+        dy=.1
+        yf=Dax+dy*2
+        ymax=(yf-yo)/dy
 
-        bh=Dn*.32406*exp(-0.39509*Dn)*0.0
-        ratio=Dn/Dax
-        nag=nag_per_ch*Sod/(PI*Lnode*Dn*10^-8)
+        for yind=0,ymax { // Node loop
 
-        // run simulation
-        initialize()
-        stimul()
-        run()
+            Dn=yo+yind*dy
 
-        time10=apt[9].x(0)
-        time20=apt[19].x(0)
+            bh=Dn*.32406*exp(-0.39509*Dn)*0.0
+            ratio=Dn/Dax
+            nag=nag_per_ch*Sod/(PI*Lnode*Dn*10^-8)
 
-        if(time20 > time10){
-            Avg1= (19-9)*Lsection/((time20-time10)*1000)
-        }
+            // run simulation
+            initialize()
+            stimul()
+            run()
 
-        if(time20 <= time10){
-            Avg1= 0
-        }
+            time10=apt[9].x(0)
+            time20=apt[19].x(0)
 
-        if(Avg1>0){
-            //fprint("%f %f %f %f %f %f %f %f %f %f\n",Dn,Dax,nl*(2*tml),Df,Lsection,9*Lsection,time20-time10,Avg1,nag,kg)
-            //printf("%f %f %f %f %f %f %f %f %f %f\n",Dn,Dax,nl*(2*tml),Df,Lsection,9*Lsection,time20-time10,Avg1,nag,kg)
-            fprint("%f %f %f %f %f\n",Dn,Dax,Avg1,nag,kg)
-            printf("%f %f %f %f %f\n",Dn,Dax,Avg1,nag,kg)
+            if(time20 > time10){
+                Avg1= (19-9)*Lsection/((time20-time10)*1000)
+            }
+
+            if(time20 <= time10){
+                Avg1= 0
+            }
+
+            if(Avg1>0){
+                //fprint("%f %f %f %f %f %f %f %f %f %f\n",Dn,Dax,nl*(2*tml),Df,Lsection,9*Lsection,time20-time10,Avg1,nag,kg)
+                //printf("%f %f %f %f %f %f %f %f %f %f\n",Dn,Dax,nl*(2*tml),Df,Lsection,9*Lsection,time20-time10,Avg1,nag,kg)
+                fprint("%f %f %f %f %f\n",Dn,Dax,Avg1,nag,kg)
+                printf("%f %f %f %f %f\n",Dn,Dax,Avg1,nag,kg)
+            }
         }
     }
 }
-
