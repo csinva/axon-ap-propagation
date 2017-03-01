@@ -6,8 +6,9 @@ create node[Nnode],mysaleft[Nmysa],mysaright[Nmysa],flut[Nflut],stin[Nstin],soma
 // stin - stereotyped internode = INTER (internode)
 
 // repeating pattern
-// starts: soma - PARA - JUXTA - INTER
-// INTER - JUXTA - PARA - NODE - PARA - JUXTA - INTER
+// starts: soma - PARA - NODE
+// then: NODE - PARA - JUXTA - INTER - JUXTA - PARA
+// all NODE (x1), PARA (x10), JUXTA (x2), INTER (x1)
 
 //connect the nodes
 connect mysaextra[0](0), soma(1)
@@ -16,7 +17,7 @@ for l=0,NmysaSec-2 {
 }
 connect node[0](0),mysaextra[NmysaSec-1](1)
 for k=0,Send {
-    connect mysaleft[NmysaSec*k](0),node[k](1)
+    connect mysaleft[NmysaSec*k](0),node[k](1)  // NODE - PARA
     connect mysaleft[NmysaSec*k+1](0),mysaleft[NmysaSec*k](1)
     connect mysaleft[NmysaSec*k+2](0),mysaleft[NmysaSec*k+1](1)
     connect mysaleft[NmysaSec*k+3](0), mysaleft[NmysaSec*k+2](1)
@@ -26,10 +27,10 @@ for k=0,Send {
     connect mysaleft[NmysaSec*k+7](0), mysaleft[NmysaSec*k+6](1)
     connect mysaleft[NmysaSec*k+8](0), mysaleft[NmysaSec*k+7](1)
     connect mysaleft[NmysaSec*k+9](0), mysaleft[NmysaSec*k+8](1)
-    connect flut[2*k](0), mysaleft[NmysaSec*k+9](1)
-    connect stin[k](0), flut[2*k](1)
-    connect flut[2*k+1](0), stin[k](1)
-    connect mysaright[NmysaSec*k](0), flut[2*k+1](1)
+    connect flut[2*k](0), mysaleft[NmysaSec*k+9](1)     // PARA - JUXTA
+    connect stin[k](0), flut[2*k](1)                    // JUXTA - INTER
+    connect flut[2*k+1](0), stin[k](1)                  // INTER - JUXTA
+    connect mysaright[NmysaSec*k](0), flut[2*k+1](1)    // JUXTA - PARA
     connect mysaright[NmysaSec*k+1](0), mysaright[NmysaSec*k](1)
     connect mysaright[NmysaSec*k+2](0), mysaright[NmysaSec*k+1](1)
     connect mysaright[NmysaSec*k+3](0), mysaright[NmysaSec*k+2](1)
@@ -39,5 +40,5 @@ for k=0,Send {
     connect mysaright[NmysaSec*k+7](0), mysaright[NmysaSec*k+6](1)
     connect mysaright[NmysaSec*k+8](0), mysaright[NmysaSec*k+7](1)
     connect mysaright[NmysaSec*k+9](0), mysaright[NmysaSec*k+8](1)
-    connect node[k+1](0), mysaright[NmysaSec*k+9](1)
+    connect node[k+1](0), mysaright[NmysaSec*k+9](1)    // PARA - NODE
 }
