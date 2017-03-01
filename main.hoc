@@ -22,9 +22,10 @@ proc run_act(){
     run()
 }
 
-run_act()
+//run_act()
 
 proc run_loop(){
+    fprint("%s %s %s %s %s\n","Dn","Dax","ave_velocity","nag","kg")
     for xind=0,xmax{ // Fiber loop
         Df=xo+xind*dx
         Dax=0.66604*Df-0.42879
@@ -53,23 +54,23 @@ proc run_loop(){
             stimul()
             run()
 
+            // apt[i] records ap timing at node[i]
             time10=apt[9].x(0)
             time20=apt[19].x(0)
 
+            // record avg velocity between node 9 and 19
+            ave_velocity = -1
             if(time20 > time10){
-                Avg1= (19-9)*Lsection/((time20-time10)*1000)
+                ave_velocity= (19-9)*Lsection/((time20-time10)*1000)
             }
-
-            if(time20 <= time10){
-                Avg1= 0
-            }
-
-            if(Avg1>0){
+            if(ave_velocity>-1){
                 //fprint("%f %f %f %f %f %f %f %f %f %f\n",Dn,Dax,nl*(2*tml),Df,Lsection,9*Lsection,time20-time10,Avg1,nag,kg)
                 //printf("%f %f %f %f %f %f %f %f %f %f\n",Dn,Dax,nl*(2*tml),Df,Lsection,9*Lsection,time20-time10,Avg1,nag,kg)
-                fprint("%f %f %f %f %f\n",Dn,Dax,Avg1,nag,kg)
-                printf("%f %f %f %f %f\n",Dn,Dax,Avg1,nag,kg)
+                fprint("%f %f %f %f %f\n",Dn,Dax,ave_velocity,nag,kg)
+                printf("%f %f %f %f %f\n",Dn,Dax,ave_velocity,nag,kg)
             }
         }
     }
 }
+
+run_loop()
