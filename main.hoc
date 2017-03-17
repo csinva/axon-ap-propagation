@@ -9,7 +9,6 @@ xopen("2_geometry.hoc")
 xopen("3_initialize.hoc")
 xopen("4_stim.hoc")
 xopen("5_record.hoc")
-xopen ("act.ses")
 xo=20.00
 xf=20.00
 dx=.25
@@ -22,12 +21,20 @@ proc run_act(){
     run()
 }
 
-//run_act()
+xopen ("act.ses")
+run_act()
 
 proc run_loop(){
     fprint("%s %s %s %s %s\n","Dn","Dax","ave_velocity","nag","kg")
+    /*
+    Quick Heads Up: The base code uses a constant 1mm node-node separation distance that has a constant Fiber/Axon Diameter.
+    For each run, the nodal diameter is increased from .1µm to the diameter of the axon (save myelin).
+    For each iteration, the conduction velocity is calculated for a given nodal diameter.
+    As the code is set-up to iterate through different node sizes,
+    modifying the code to vary the internodal length would not be difficult.
+    */
     for xind=0,xmax{ // Fiber loop
-        Df=xo+xind*dx
+        Df=xo+xind*dx   // Diameter fiber
         Dax=0.66604*Df-0.42879
         nl=(Df-Dax)/(2*tml)
         passiveg=g_nl/(2*nl)
@@ -43,7 +50,7 @@ proc run_loop(){
 
         for yind=0,ymax { // Node loop
 
-            Dn=yo+yind*dy
+            Dn=yo+yind*dy   // Nodal diameter
 
             bh=Dn*.32406*exp(-0.39509*Dn)*0.0
             ratio=Dn/Dax
@@ -70,7 +77,10 @@ proc run_loop(){
                 printf("%f %f %f %f %f\n",Dn,Dax,ave_velocity,nag,kg)
             }
         }
+        /*
+        (Plotting columns 1 & 3 of the output will provide a conduction-velocity vs Nodal-Diameter curve as seen in our paper)
+        */
     }
 }
 
-run_loop()
+//run_loop()

@@ -1,5 +1,5 @@
 Dn=.1
-Df=20
+Df=20   // Diameter, fiber
 Dax=0.66604*Df-0.42879
 ratio=Dn/Dax
 tml=.018

@@ -46,40 +46,40 @@ proc initialize(){
 
 		for h=0,Send {
 			for k=0,kmax mysaleft[NmysaSec*h+k] {
-				insert pas
-				L=mysaDL
-				Dout=(Df-Dn)*sin(L*(k+1)*PI/(2*Lmysa))+Dn
-				Din=Dn*exp(((k)/(kmax))*log(Dax/Dn))
-				diam=Dout
-				delta=abs(Dout-Din)/2
-				nnl=delta/(tml)
-				if(nnl<=0){nnl=1}
-				cm=2*eo*er/( Dout*log(Dout/Din))
-				cm=cm/(1+cm*Dout/(cm_n*Din))
-				g_pas=g_nl/(2*nnl)
-				e_pas=v_init
-				Ra=rhoa*(1/(Din/Dout)^2)
-				nseg = 1
-				}
+                insert pas
+                L=mysaDL
+                Dout=(Df-Dn)*sin(L*(k+1)*PI/(2*Lmysa))+Dn
+                Din=Dn*exp(((k)/(kmax))*log(Dax/Dn))
+                diam=Dout
+                delta=abs(Dout-Din)/2
+                nnl=delta/(tml)
+                if(nnl<=0){nnl=1}
+                cm=2*eo*er/( Dout*log(Dout/Din))
+                cm=cm/(1+cm*Dout/(cm_n*Din))
+                g_pas=g_nl/(2*nnl)
+                e_pas=v_init
+                Ra=rhoa*(1/(Din/Dout)^2)
+                nseg = 1
+            }
 		}
 
 		for h=0,Send {
-			for k=0,kmax mysaright[NmysaSec*h+k] {
-		        insert pas
-				L=mysaDL
-				Dout=(Df-Dn)*cos(L*(k)*PI/(2*Lmysa))+Dn
-				Din=Dn*exp(((kmax-k)/(kmax))*log(Dax/Dn))
-				diam=Dout
-				delta=abs(Dout-Din)/2
-				nnl=delta/(tml)
-				if(nnl<=0){nnl=1}
-				cm=2*eo*er/( Dout*log(Dout/Din))
-				cm=cm/(1+cm*Dout/(cm_n*Din))
-				g_pas=g_nl/(2*nnl)
-				e_pas=v_init
-				Ra=rhoa*(1/(Din/Dout)^2)
-				nseg = 1
-				}
+            for k=0,kmax mysaright[NmysaSec*h+k] {
+                insert pas
+                L=mysaDL
+                Dout=(Df-Dn)*cos(L*(k)*PI/(2*Lmysa))+Dn
+                Din=Dn*exp(((kmax-k)/(kmax))*log(Dax/Dn))
+                diam=Dout
+                delta=abs(Dout-Din)/2
+                nnl=delta/(tml)
+                if(nnl<=0){nnl=1}
+                cm=2*eo*er/( Dout*log(Dout/Din))
+                cm=cm/(1+cm*Dout/(cm_n*Din))
+                g_pas=g_nl/(2*nnl)
+                e_pas=v_init
+                Ra=rhoa*(1/(Din/Dout)^2)
+                nseg = 1
+            }
 		}
 
 		for l=0,Nflut-1 flut[l]{
