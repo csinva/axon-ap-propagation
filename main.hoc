@@ -2,11 +2,11 @@ load_file("nrngui.hoc")
 cvode_active(1)
 cvode.atol(0.00001)
 cvode.condition_order(2)
-wopen("Dbl_Taper_20uDF.txt") //output 26,36,44
+wopen("data/Dbl_Taper_20uDF.txt") //output 26,36,44
 
 xopen("1_params.hoc")
 xopen("2_geometry.hoc")
-xopen("3_initialize.hoc")
+xopen("3_conductances.hoc")
 xopen("4_stim.hoc")
 xopen("5_record.hoc")
 xo=20.00
@@ -21,18 +21,12 @@ proc run_act(){
     run()
 }
 
-xopen ("act.ses")
-run_act()
 
+/* Uses a constant 1mm node-node separation distance that has a constant Fiber/Axon Diameter.
+For each run, the nodal diameter is increased from .1µm to the diameter of the axon (save myelin).
+For each iteration, the conduction velocity is calculated for a given nodal diameter. */
 proc run_loop(){
     fprint("%s %s %s %s %s\n","Dn","Dax","ave_velocity","nag","kg")
-    /*
-    Quick Heads Up: The base code uses a constant 1mm node-node separation distance that has a constant Fiber/Axon Diameter.
-    For each run, the nodal diameter is increased from .1µm to the diameter of the axon (save myelin).
-    For each iteration, the conduction velocity is calculated for a given nodal diameter.
-    As the code is set-up to iterate through different node sizes,
-    modifying the code to vary the internodal length would not be difficult.
-    */
     for xind=0,xmax{ // Fiber loop
         Df=xo+xind*dx   // Diameter fiber
         Dax=0.66604*Df-0.42879
@@ -61,7 +55,7 @@ proc run_loop(){
             stimul()
             run()
 
-            // apt[i] records ap timing at node[i]
+            // record ap timing at node[i] in apt[i]
             time10=apt[9].x(0)
             time20=apt[19].x(0)
 
@@ -73,14 +67,14 @@ proc run_loop(){
             if(ave_velocity>-1){
                 //fprint("%f %f %f %f %f %f %f %f %f %f\n",Dn,Dax,nl*(2*tml),Df,Lsection,9*Lsection,time20-time10,Avg1,nag,kg)
                 //printf("%f %f %f %f %f %f %f %f %f %f\n",Dn,Dax,nl*(2*tml),Df,Lsection,9*Lsection,time20-time10,Avg1,nag,kg)
-                fprint("%f %f %f %f %f\n",Dn,Dax,ave_velocity,nag,kg)
+                fprint("%f %f %f %f %f\n",Dn,Dax,ave_velocity,nag,kg) // (Plotting columns 1 & 3 of the output will provide a conduction-velocity vs Nodal-Diameter curve as seen in our paper)
                 printf("%f %f %f %f %f\n",Dn,Dax,ave_velocity,nag,kg)
             }
         }
-        /*
-        (Plotting columns 1 & 3 of the output will provide a conduction-velocity vs Nodal-Diameter curve as seen in our paper)
-        */
     }
 }
 
-//run_loop()
+
+//xopen ("act.ses")
+//run_act()
+run_loop()
