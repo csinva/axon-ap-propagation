@@ -1,16 +1,16 @@
 //intracellular stimulus
 objectvar stim
-istim=10
-delay=1
-pw=0.5
-tstop=delay+5
+istim=10        // nA
+delay=1         // ms
+dur_stim=0.5    // ms
+tstop=delay+5   // ms
 
 proc stimul() {
 	node[0]{
 		stim=new IClamp()
 		stim.loc(.5)
 		stim.del=delay
-		stim.dur=pw
+		stim.dur=dur_stim
 		stim.amp=istim
 	}
 }

@@ -8,7 +8,7 @@ headers = np.genfromtxt(fname, dtype="str")[0, :]
 data = {}
 for i in range(len(headers)):
     data[headers[i]] = x[:, i]
-plt.plot(data['Dn'], data['ave_velocity'])
+plt.plot(data['nodal_diameter'], data['ave_velocity'])
 plt.xlabel("Nodal Diameter")
 plt.ylabel("Velocity")
 plt.savefig("../plots/velocity.pdf")
