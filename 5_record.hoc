@@ -7,6 +7,44 @@ for i=0,Nnode-1 {
     nc[i].record(apt[i])
 }
 
+// record Na
+objref rec_na[Nnode]
+for i=0,Nnode-1{
+    rec_na[i] = new Vector()
+    rec_na[i].record(&node[i].ina_axnode75(0.5))
+}
+
+// record K
+objref rec_k[Nflut]
+for l=0,Nflut-1{
+    rec_k[l] = new Vector()
+    rec_k[l].record(&flut[l].ik_parak75(0.5))
+}
+
+// forsec "sec"{
+//    print sec
+//}
+
 //forall {
 	//print secname()
 //}
+
+// for (x) print x*v(x)
+
+
+// full recording
+/*
+Nseg = 0
+forall{
+    for (x) Nseg = Nseg+1
+}
+print "Nseg ",Nseg
+
+i = 0
+forall{
+    for (x) {
+//        recs[i].record(&ina_axnode75(x))
+        i += 1
+    }
+}
+*/
