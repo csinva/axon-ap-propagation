@@ -31,7 +31,6 @@ proc initialize(){
 
 			nseg = 1
 		}
-        print nag
 		mysaddin=(axon_diameter-nodal_diameter)/(NmysaSec)
 		mysaddout=(fiber_diameter-nodal_diameter)/(NmysaSec)
 		mysaDL=(Lmysa)/NmysaSec

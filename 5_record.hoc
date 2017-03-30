@@ -33,8 +33,6 @@ proc save_currs(){
   for i=Nnode,Nnode+Nflut-1{
     rec_currs.setcol(i,rec_k[0])
   }
-  print $s1
-  sprint(s1,"%s",$s1)
   // write
   f = new File()
   f.wopen($s1)  //open a file with a defined name to save data
@@ -50,7 +48,7 @@ func na_flux_tot(){
         na_flux += rec_na[i].x[j]
     }
   }
-  return na_flux*area_node*tstop*1e-6 //ma/cm^2 * cm^2 * ms = microCoulombs *1e-6 -> Coulombs
+  return -1*na_flux*area_node*tstop*1e-6 //ma/cm^2 * cm^2 * ms = microCoulombs *1e-6 -> Coulombs
 }
 
 func k_flux_tot(){
