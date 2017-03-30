@@ -115,6 +115,10 @@ proc initialize(){
 			Ra=nodal_axial_resistivity*(1/(axon_diameter/fiber_diameter)^2)
 			nseg = 5
 		}
+    access node[0]
+    area_node = area(0.5)
+    access flut[0]
+    area_flut = area(0.5)
     finitialize(v_init)
     fcurrent()
 }

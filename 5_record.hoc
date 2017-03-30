@@ -25,9 +25,6 @@ proc record_start(){
 }
 
 proc save_currs(){
-//  print "save_currs",rec_na[0].size()
-//  print $s1
-
   rec_currs= new Matrix()
   rec_currs.resize(rec_na[0].size(),Nnode+Nflut)
   for i=0,Nnode-1{
@@ -38,10 +35,6 @@ proc save_currs(){
   }
   print $s1
   sprint(s1,"%s",$s1)
-  access node[0]
-  area_node = area(0.5)
-  access flut[0]
-  area_flut = area(0.5)
   // write
   f = new File()
   f.wopen($s1)  //open a file with a defined name to save data
@@ -49,6 +42,27 @@ proc save_currs(){
   rec_currs.fprint(f," %g")
   f.close()
 }
+
+func na_flux_tot(){
+  na_flux = 0
+  for i=0,Nnode-1{
+    for j=0,rec_na[0].size()-1{
+        na_flux += rec_na[i].x[j]
+    }
+  }
+  return na_flux*area_node*tstop*1e-6 //ma/cm^2 * cm^2 * ms = microCoulombs *1e-6 -> Coulombs
+}
+
+func k_flux_tot(){
+  k_flux = 0
+  for i=0,Nflut-1{
+    for j=0,rec_k[0].size()-1{
+        k_flux += rec_k[i].x[j]
+    }
+  }
+  return k_flux*area_flut*tstop*1e-6
+}
+
 // forsec "sec"{
 //    print sec
 //}

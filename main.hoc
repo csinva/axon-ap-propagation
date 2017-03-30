@@ -19,6 +19,10 @@ proc run_act(){
     stimul()
     run()
     save_currs("data/currs.txt")
+    na_flux = na_flux_tot()
+    k_flux = k_flux_tot()
+    print "na_flux ",na_flux," C"
+    print "k_flux ",k_flux," C"
 }
 
 
