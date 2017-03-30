@@ -1,26 +1,54 @@
 // Record from nodes from injection site
-objref null
+objref rec_currs, null
 objref nc[Nnode], apt[Nnode]
-for i=0,Nnode-1 {
-    node[i] nc[i] = new NetCon(&v(0.5), null, -40, 0, 0)
-    apt[i] = new Vector()               // Action potential times
-    nc[i].record(apt[i])
+objref rec_na[Nnode], rec_k[Nflut]
+objref f
+strdef s1
+proc record_start(){
+    for i=0,Nnode-1 {
+        node[i] nc[i] = new NetCon(&v(0.5), null, -40, 0, 0)
+        apt[i] = new Vector()               // Action potential times
+        nc[i].record(apt[i])
+    }
+
+    // record Na
+    for i=0,Nnode-1{
+        rec_na[i] = new Vector()
+        rec_na[i].record(&node[i].ina_axnode75(0.5))
+    }
+
+    // record K
+    for l=0,Nflut-1{
+        rec_k[l] = new Vector()
+        rec_k[l].record(&flut[l].ik_parak75(0.5))
+    }
 }
 
-// record Na
-objref rec_na[Nnode]
-for i=0,Nnode-1{
-    rec_na[i] = new Vector()
-    rec_na[i].record(&node[i].ina_axnode75(0.5))
-}
+proc save_currs(){
+//  print "save_currs",rec_na[0].size()
+//  print $s1
 
-// record K
-objref rec_k[Nflut]
-for l=0,Nflut-1{
-    rec_k[l] = new Vector()
-    rec_k[l].record(&flut[l].ik_parak75(0.5))
+  rec_currs= new Matrix()
+  rec_currs.resize(rec_na[0].size(),Nnode+Nflut)
+  for i=0,Nnode-1{
+    rec_currs.setcol(i,rec_na[0])
+  }
+  for i=Nnode,Nnode+Nflut-1{
+    rec_currs.setcol(i,rec_k[0])
+  }
+  print $s1
+  sprint(s1,"%s",$s1)
+  access node[0]
+  area_node = area(0.5)
+  access flut[0]
+  area_flut = area(0.5)
+  // write
+  f = new File()
+  f.wopen($s1)  //open a file with a defined name to save data
+  f.printf("Nnode=%d,Nflut=%d,node_area=%f,flut_area=%f,dt=%f\n",Nnode,Nflut,area_node,area_flut,dt)
+  rec_currs.fprint(f," %g")
+  f.close()
 }
-
 // forsec "sec"{
 //    print sec
 //}

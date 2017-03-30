@@ -15,8 +15,10 @@ xopen("5_record.hoc")
 proc run_act(){
     xopen ("act.ses")
     initialize()
+    record_start()
     stimul()
     run()
+    save_currs("data/currs.txt")
 }
 
 
