@@ -1,4 +1,7 @@
 proc initialize(){
+//        vshift_na12 = -35 - (-30) -10  // negative shift of input voltage, high threshold  -30mV
+//        vshift_na16 = -35 - (-43) -10    // positive shift of input voltage, low threshold  -43mV
+        vshift_na16 = -35 - (0) -10    // positive shift of input voltage, low threshold  -43mV
 		soma {
 			L=Lsoma
 			diam=fiber_diameter
@@ -15,13 +18,20 @@ proc initialize(){
 			L=Lnode
 			cm=cm_node
 			Ra=nodal_axial_resistivity
+            /*
+			insert na12
+			insert na16
+			gbar_na12 = nag*1000/2  //nag/200
+			gbar_na16 = nag/2  //nag/200
+			*/
 			insert axnode75
-			gnapbar_axnode75=0.00
 			gnabar_axnode75=nag
+			gnapbar_axnode75=0.00
 			gkbar_axnode75=0.0
+
 			nseg = 1
 		}
-
+        print nag
 		mysaddin=(axon_diameter-nodal_diameter)/(NmysaSec)
 		mysaddout=(fiber_diameter-nodal_diameter)/(NmysaSec)
 		mysaDL=(Lmysa)/NmysaSec
@@ -34,7 +44,7 @@ proc initialize(){
             Din=nodal_diameter*exp(((kmax-k)/(kmax))*log(axon_diameter/nodal_diameter))
             diam=Dout
             delta=abs(Dout-Din)/2
-            nnl=delta/(tml)
+            nnl=delta/(thickness_myelin)
             if(nnl<=0){nnl=1}
             cm=2*eo*er/( Dout*log(Dout/Din))
             cm=cm/(1+cm*Dout/(cm_node*Din))
@@ -52,7 +62,7 @@ proc initialize(){
                 Din=nodal_diameter*exp(((k)/(kmax))*log(axon_diameter/nodal_diameter))
                 diam=Dout
                 delta=abs(Dout-Din)/2
-                nnl=delta/(tml)
+                nnl=delta/(thickness_myelin)
                 if(nnl<=0){nnl=1}
                 cm=2*eo*er/( Dout*log(Dout/Din))
                 cm=cm/(1+cm*Dout/(cm_node*Din))
@@ -71,7 +81,7 @@ proc initialize(){
                 Din=nodal_diameter*exp(((kmax-k)/(kmax))*log(axon_diameter/nodal_diameter))
                 diam=Dout
                 delta=abs(Dout-Din)/2
-                nnl=delta/(tml)
+                nnl=delta/(thickness_myelin)
                 if(nnl<=0){nnl=1}
                 cm=2*eo*er/( Dout*log(Dout/Din))
                 cm=cm/(1+cm*Dout/(cm_node*Din))
@@ -90,7 +100,6 @@ proc initialize(){
 			cm=passivecm
 			e_pas=v_init
 			Ra=nodal_axial_resistivity*(1/(axon_diameter/fiber_diameter)^2)
-
 			insert parak75
 			gkbar_parak75=kg*(axon_diameter/fiber_diameter)
 			nseg = 1

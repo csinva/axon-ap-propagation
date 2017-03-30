@@ -2,7 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import plot_setup
 
-fname = '../data/Dbl_Taper_20uDF_1.txt'
+fname = '../data/Dbl_Taper_20uDF.txt'
 x = np.loadtxt(fname, skiprows=1)
 headers = np.genfromtxt(fname, dtype="str")[0, :]
 data = {}
