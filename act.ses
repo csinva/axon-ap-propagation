@@ -40,19 +40,20 @@ save_window_.addexpr("node[16].v( 0.5 )", 4, 1, 0.8, 0.9, 2)
 save_window_ = new Graph(0)
 save_window_.size(-1.78814e-07,6,-5,5)
 scene_vector_[4] = save_window_
-{save_window_.view(-1.78814e-07, -5, 6, 10, 728, 118, 352.32, 305.92)}
+{save_window_.view(-1.78814e-07, -5, 6, 10, 722, 117, 348.48, 316.48)}
 graphList[1].append(save_window_)
 save_window_.save_name("graphList[1].")
-save_window_.addexpr("node[5].ina_axnode75( 0.5 )", 1, 1, 0.8, 0.9, 2)
+save_window_.addexpr("node[15].ina_axnode75( 0.5 )", 1, 1, 0.8, 0.9, 2)
 }
 {
 save_window_ = new Graph(0)
-save_window_.size(-1.78814e-07,6,1.16415e-10,0.01)
+save_window_.size(-1.78814e-07,6,2.32831e-10,0.01)
 scene_vector_[5] = save_window_
-{save_window_.view(-1.78814e-07, 1.16415e-10, 6, 0.01, 741, 531, 300.48, 200.32)}
+{save_window_.view(-1.78814e-07, 2.32831e-10, 6, 0.01, 720, 506, 359.04, 301.12)}
 graphList[1].append(save_window_)
 save_window_.save_name("graphList[1].")
-save_window_.addvar("flut[4].ik_parak75( 0.5 )", 1, 1, 0.8, 0.9, 2)
+save_window_.addvar("flut[29].ik_parak75( 0.5 )", 1, 1, 0.8, 0.9, 2)
+save_window_.addvar("flut[30].ik_parak75( 0.5 )", 1, 1, 0.8, 0.9, 2)
 }
 objectvar scene_vector_[1]
 {doNotify()}

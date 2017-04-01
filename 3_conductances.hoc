@@ -1,7 +1,6 @@
 proc initialize(){
-//        vshift_na12 = -35 - (-30) -10  // negative shift of input voltage, high threshold  -30mV
-//        vshift_na16 = -35 - (-43) -10    // positive shift of input voltage, low threshold  -43mV
-        vshift_na16 = -35 - (0) -10    // positive shift of input voltage, low threshold  -43mV
+        vshift_na12 = -35 - (-30) -10  // negative shift of input voltage, high threshold  -30mV
+        vshift_na16 = -35 - (-43) -10    // positive shift of input voltage, low threshold  -43mV
 		soma {
 			L=Lsoma
 			diam=fiber_diameter
@@ -14,16 +13,16 @@ proc initialize(){
 		}
 
 		for i=0,Nnode-1 node[i]{
-			diam=(nodal_diameter+bh)
+			diam=(nodal_diameter+nodal_diameter_inc)
 			L=Lnode
 			cm=cm_node
 			Ra=nodal_axial_resistivity
-            /*
-			insert na12
-			insert na16
-			gbar_na12 = nag*1000/2  //nag/200
-			gbar_na16 = nag/2  //nag/200
-			*/
+
+//			insert na12
+//			insert na16
+//			gbar_na12 = nag*100/2  //nag/200
+//			gbar_na16 = nag*100/2  //nag/200
+
 			insert axnode75
 			gnabar_axnode75=nag
 			gnapbar_axnode75=0.00

@@ -1,5 +1,7 @@
 import matplotlib.pyplot as plt
 from matplotlib import rc
+fig = plt.figure(figsize=(12, 7))
+fig.set_facecolor('white')
 rc('lines', markersize=4)
 rc('legend', numpoints=1, fontsize=10)
 rc('axes', labelsize=10)

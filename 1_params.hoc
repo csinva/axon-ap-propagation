@@ -32,11 +32,11 @@ cm_node =1.0    // specific capacitance (microf / cm^2)
 cm_my=2*eo*er/( fiber_diameter*log(fiber_diameter/axon_diameter))
 c_nl=cm_my*(nl)
 passivecm=cm_my/(1+cm_my*fiber_diameter/(cm_node*axon_diameter))
-bh=nodal_diameter*.32406*exp(-0.39509*nodal_diameter)*0.0
+nodal_diameter_inc=nodal_diameter*.32406*exp(-0.39509*nodal_diameter)*0.0
 
 num_sod_chans=20000           // number sodium channels
 nag_per_chan=20*10^-12
-nag=nag_per_chan*num_sod_chans/(PI*Lnode*(nodal_diameter+bh)*10^-8) // ( 10^-8 ---> convert to /cm^2)
+nag=nag_per_chan*num_sod_chans/(PI*Lnode*(nodal_diameter+nodal_diameter_inc)*10^-8) // ( 10^-8 ---> convert to /cm^2)
 
 num_k_chans=250
 kg_per_ch=nag_per_chan

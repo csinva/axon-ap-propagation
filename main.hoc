@@ -1,8 +1,14 @@
 load_file("nrngui.hoc")
+
+secondorder=2 // good for small time-steps
+// fixed time-step integration
+//dt = .001 // ms
+
+
+// variable integration
 cvode_active(1)
-cvode.atol(0.00001)
-cvode.condition_order(2)
-secondorder=2
+cvode.atol(1e-8) // was set to 1e-5
+cvode.condition_order(2) // 2 is better for NetCon
 
 
 
@@ -19,10 +25,10 @@ proc run_act(){
     stimul()
     run()
     save_currs("data/currs.txt")
-    na_flux = na_flux_tot()
-    k_flux = k_flux_tot()
-    print "na_flux ",na_flux," C"
-    print "k_flux ",k_flux," C"
+    na_flux = na_flux_node15()
+    k_flux = k_flux_node15()
+    print "na_flux_node15 ",na_flux," C"
+    print "k_flux_node15 ",k_flux," C"
 }
 
 
@@ -50,13 +56,13 @@ proc run_loop(){
         kg=kg_per_ch*num_k_chans/(PI*Lflut*axon_diameter*10^-8)
 
         // parameters for changing nodal_diameter
-        yo=.2
+        yo=.8
         dy=.1
         yf=axon_diameter+dy*2
         ymax=(yf-yo)/dy
         for yind=0,ymax { // Node loop
             nodal_diameter=yo+yind*dy
-            bh=nodal_diameter*.32406*exp(-0.39509*nodal_diameter)*0.0
+            nodal_diameter_inc=nodal_diameter*.32406*exp(-0.39509*nodal_diameter)*0.0
             ratio=nodal_diameter/axon_diameter
             nag=nag_per_chan*num_sod_chans/(PI*Lnode*nodal_diameter*10^-8)
 
@@ -78,8 +84,8 @@ proc run_loop(){
             if(ave_velocity>-1){
                 //fprint("%f %f %f %f %f %f %f %f %f %f\n",nodal_diameter,axon_diameter,nl*(2*thickness_myelin),fiber_diameter,Lsection,9*Lsection,time20-time10,Avg1,nag,kg)
                 //printf("%f %f %f %f %f %f %f %f %f %f\n",nodal_diameter,axon_diameter,nl*(2*thickness_myelin),fiber_diameter,Lsection,9*Lsection,time20-time10,Avg1,nag,kg)
-                fprint("%f %f %f %f %f %f %f \n",nodal_diameter,axon_diameter,ave_velocity,nag,kg,na_flux_tot(),k_flux_tot()) // (Plotting columns 1 & 3 of the output will provide a conduction-velocity vs Nodal-Diameter curve as seen in our paper)
-                printf("%f %f %f %f %f %f %f \n",nodal_diameter,axon_diameter,ave_velocity,nag,kg,na_flux_tot(),k_flux_tot())
+                fprint("%f %f %f %f %f %f %f \n",nodal_diameter,axon_diameter,ave_velocity,nag,kg,na_flux_node15(),k_flux_node15()) // (Plotting columns 1 & 3 of the output will provide a conduction-velocity vs Nodal-Diameter curve as seen in our paper)
+                printf("%f %f %f %f %f %f %f \n",nodal_diameter,axon_diameter,ave_velocity,nag,kg,na_flux_node15(),k_flux_node15())
             }
         }
     }
