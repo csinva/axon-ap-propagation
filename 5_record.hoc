@@ -49,13 +49,14 @@ func na_flux_node15(){
     for j=1,rec_na[0].size()-1{
         na_flux += rec_na[15].x[j] * (rec_t.x[j]-rec_t.x[j-1])
     }
-  return -1*na_flux*area_node*dt*1e-6 //ma/cm^2 * cm^2 * ms = microCoulombs *1e-6 -> Coulombs
+  return -1*na_flux*area_node*1e-6 //ma/cm^2 * cm^2 * ms = microCoulombs *1e-6 -> Coulombs
 }
 
 func k_flux_node15(){
   k_flux = 0
     for j=1,rec_k[0].size()-1{
         deltat = rec_t.x[j]-rec_t.x[j-1]
+//        print "deltat ",deltat
         k_flux += rec_k[29].x[j] * deltat
         k_flux += rec_k[30].x[j] * deltat
     }
