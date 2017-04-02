@@ -2,12 +2,11 @@ load_file("nrngui.hoc")
 
 secondorder=2 // good for small time-steps
 // fixed time-step integration
-//dt = .001 // ms
-
+//dt = .0001 // ms
 
 // variable integration
 cvode_active(1)
-cvode.atol(1e-8) // was set to 1e-5
+cvode.atol(1e-10) // was set to 1e-5
 cvode.condition_order(2) // 2 is better for NetCon
 
 
@@ -57,7 +56,7 @@ proc run_loop(){
 
         // parameters for changing nodal_diameter
         yo=.8
-        dy=.1
+        dy=.25
         yf=axon_diameter+dy*2
         ymax=(yf-yo)/dy
         for yind=0,ymax { // Node loop
@@ -82,7 +81,7 @@ proc run_loop(){
                 ave_velocity= (19-9)*Lsection/((time20-time10)*1000)
             }
             if(ave_velocity>-1){
-                //fprint("%f %f %f %f %f %f %f %f %f %f\n",nodal_diameter,axon_diameter,nl*(2*thickness_myelin),fiber_diameter,Lsection,9*Lsection,time20-time10,Avg1,nag,kg)
+                //fprint("%f %f %f %f %f %f %f %f %f %f\n",nodal_diameter,axon_diameter,nl*(2*thickness_mycalelin),fiber_diameter,Lsection,9*Lsection,time20-time10,Avg1,nag,kg)
                 //printf("%f %f %f %f %f %f %f %f %f %f\n",nodal_diameter,axon_diameter,nl*(2*thickness_myelin),fiber_diameter,Lsection,9*Lsection,time20-time10,Avg1,nag,kg)
                 fprint("%f %f %f %f %f %f %f \n",nodal_diameter,axon_diameter,ave_velocity,nag,kg,na_flux_node15(),k_flux_node15()) // (Plotting columns 1 & 3 of the output will provide a conduction-velocity vs Nodal-Diameter curve as seen in our paper)
                 printf("%f %f %f %f %f %f %f \n",nodal_diameter,axon_diameter,ave_velocity,nag,kg,na_flux_node15(),k_flux_node15())
@@ -92,5 +91,5 @@ proc run_loop(){
 }
 
 
-//run_act()
-run_loop()
+run_act()
+//run_loop()

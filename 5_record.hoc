@@ -1,7 +1,7 @@
 // Record from nodes from injection site
 objref rec_currs, null
 objref nc[Nnode], apt[Nnode]
-objref rec_na[Nnode], rec_k[Nflut]
+objref rec_na[Nnode], rec_k[Nflut], rec_t
 objref f
 strdef s1
 
@@ -23,6 +23,8 @@ proc record_start(){
         rec_k[l] = new Vector()
         rec_k[l].record(&flut[l].ik_parak75(0.5))
     }
+    rec_t = new Vector()
+    rec_t.record(&t)
 }
 
 proc save_currs(){
@@ -44,28 +46,26 @@ proc save_currs(){
 
 func na_flux_node15(){
   na_flux = 0
-  i = 15
-    for j=0,rec_na[0].size()-1{
-        na_flux += rec_na[i].x[j]
+    for j=1,rec_na[0].size()-1{
+        na_flux += rec_na[15].x[j] * (rec_t.x[j]-rec_t.x[j-1])
     }
-
   return -1*na_flux*area_node*dt*1e-6 //ma/cm^2 * cm^2 * ms = microCoulombs *1e-6 -> Coulombs
 }
 
 func k_flux_node15(){
   k_flux = 0
-  i = 29
-    for j=0,rec_k[0].size()-1{
-        k_flux += rec_k[i].x[j]
-    }
-  i = 30
-    for j=0,rec_k[0].size()-1{
-          k_flux += rec_k[i].x[j]
+    for j=1,rec_k[0].size()-1{
+        deltat = rec_t.x[j]-rec_t.x[j-1]
+        k_flux += rec_k[29].x[j] * deltat
+        k_flux += rec_k[30].x[j] * deltat
     }
 
-  return k_flux*area_flut*dt*1e-6
+  return k_flux*area_flut*1e-6
 }
 
+
+
+// totals
 func na_flux_tot(){
   na_flux = 0
   for i=0,Nnode-1{
@@ -73,7 +73,7 @@ func na_flux_tot(){
         na_flux += rec_na[i].x[j]
     }
   }
-  return -1*na_flux*area_node*dt*1e-6 //ma/cm^2 * cm^2 * ms = microCoulombs *1e-6 -> Coulombs
+  return -1*na_flux*area_node*1e-6 //ma/cm^2 * cm^2 * ms = microCoulombs *1e-6 -> Coulombs
 }
 
 func k_flux_tot(){
@@ -85,31 +85,3 @@ func k_flux_tot(){
   }
   return k_flux*area_flut*dt*1e-6
 }
-
-// forsec "sec"{
-//    print sec
-//}
-
-//forall {
-	//print secname()
-//}
-
-// for (x) print x*v(x)
-
-
-// full recording
-/*
-Nseg = 0
-forall{
-    for (x) Nseg = Nseg+1
-}
-print "Nseg ",Nseg
-
-i = 0
-forall{
-    for (x) {
-//        recs[i].record(&ina_axnode75(x))
-        i += 1
-    }
-}
-*/
