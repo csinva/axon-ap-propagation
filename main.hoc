@@ -1,15 +1,12 @@
 load_file("nrngui.hoc")
-
 secondorder=2 // good for small time-steps
+
 // fixed time-step integration
 //dt = .0001 // ms
-
 // variable integration
 cvode_active(1)
 cvode.atol(1e-5) // was set to 1e-5
 cvode.condition_order(2) // 2 is better for NetCon
-
-
 
 xopen("1_params.hoc")
 xopen("2_geometry.hoc")
@@ -30,16 +27,39 @@ proc run_act(){
     print "k_flux_node15 ",k_flux," C"
 }
 
+proc run_and_record(){
+    // run simulation
+    initialize()
+    record_start()
+    stimul()
+    run()
+
+    // record ap timing at node[i] in apt[i]
+    time10=apt[9].x(0)
+    time20=apt[19].x(0)
+
+    // record avg velocity between node 9 and 19
+    ave_velocity = -1
+    if(time20 > time10){
+        ave_velocity= (19-9)*Lsection/((time20-time10)*1000)
+    }
+    if(ave_velocity>-1){
+        //fprint("%f %f %f %f %f %f %f %f %f %f\n",nodal_diameter,axon_diameter,nl*(2*thickness_mycalelin),fiber_diameter,Lsection,9*Lsection,time20-time10,Avg1,nag,kg)
+        //printf("%f %f %f %f %f %f %f %f %f %f\n",nodal_diameter,axon_diameter,nl*(2*thickness_myelin),fiber_diameter,Lsection,9*Lsection,time20-time10,Avg1,nag,kg)
+        fprint("%f %f %f %f %f %.8f %.8f \n",nodal_diameter,axon_diameter,ave_velocity,nag,kg,na_flux_node15(),k_flux_node15()) // (Plotting columns 1 & 3 of the output will provide a conduction-velocity vs Nodal-Diameter curve as seen in our paper)
+        printf("%f %f %f %f %f %.8f %.8f \n",nodal_diameter,axon_diameter,ave_velocity,nag,kg,na_flux_node15(),k_flux_node15())
+    }
+}
 
 /* Uses a constant 1mm node-node separation distance that has a constant Fiber/Axon Diameter.
 For each run, the nodal diameter is increased from .1µm to the diameter of the axon (save myelin).
 For each iteration, the conduction velocity is calculated for a given nodal diameter. */
 proc run_loop(){
-    wopen("data/out.txt") //output 26,36,44
+    wopen("data/out.txt")
     fprint("%s %s %s %s %s %s %s\n","nodal_diameter","axon_diameter","ave_velocity","nag","kg","na_flux","k_flux")
     printf("%s %s %s %s %s %s %s\n","nodal_diameter","axon_diameter","ave_velocity","nag","kg","na_flux","k_flux")
 
-    // parameters for changing fiber diameter
+    // change fiber diameter
     xo=20.00
     xf=20.00
     dx=.25
@@ -54,38 +74,19 @@ proc run_loop(){
         c_nl=passivecm*(nl)
         kg=kg_per_ch*num_k_chans/(PI*Lflut*axon_diameter*10^-8)
 
-        // parameters for changing nodal_diameter
+        // change nodal_diameter
         yo=.8
         dy=.25
         yf=axon_diameter+dy*2
         ymax=(yf-yo)/dy
-        for yind=0,ymax { // Node loop
+        for yind=0,ymax {
             nodal_diameter=yo+yind*dy
             nodal_diameter_inc=nodal_diameter*.32406*exp(-0.39509*nodal_diameter)*0.0
             ratio=nodal_diameter/axon_diameter
             nag=nag_per_chan*num_sod_chans/(PI*Lnode*nodal_diameter*10^-8)
 
-            // run simulation
-            initialize()
-            record_start()
-            stimul()
-            run()
-
-            // record ap timing at node[i] in apt[i]
-            time10=apt[9].x(0)
-            time20=apt[19].x(0)
-
-            // record avg velocity between node 9 and 19
-            ave_velocity = -1
-            if(time20 > time10){
-                ave_velocity= (19-9)*Lsection/((time20-time10)*1000)
-            }
-            if(ave_velocity>-1){
-                //fprint("%f %f %f %f %f %f %f %f %f %f\n",nodal_diameter,axon_diameter,nl*(2*thickness_mycalelin),fiber_diameter,Lsection,9*Lsection,time20-time10,Avg1,nag,kg)
-                //printf("%f %f %f %f %f %f %f %f %f %f\n",nodal_diameter,axon_diameter,nl*(2*thickness_myelin),fiber_diameter,Lsection,9*Lsection,time20-time10,Avg1,nag,kg)
-                fprint("%f %f %f %f %f %f %f \n",nodal_diameter,axon_diameter,ave_velocity,nag,kg,na_flux_node15(),k_flux_node15()) // (Plotting columns 1 & 3 of the output will provide a conduction-velocity vs Nodal-Diameter curve as seen in our paper)
-                printf("%f %f %f %f %f %f %f \n",nodal_diameter,axon_diameter,ave_velocity,nag,kg,na_flux_node15(),k_flux_node15())
-            }
+            // run and record velocity
+            run_and_record()
         }
     }
 }
