@@ -2,7 +2,7 @@ load_file("nrngui.hoc")
 secondorder=2 // good for small time-steps
 
 // fixed time-step integration
-//dt = .0001 // ms
+// dt = .0001 // ms
 // variable integration
 cvode_active(1)
 cvode.atol(1e-5) // was set to 1e-5
@@ -13,6 +13,7 @@ xopen("2_geometry.hoc")
 xopen("3_conductances.hoc")
 xopen("4_stim.hoc")
 xopen("5_record.hoc")
+xopen("param_sweeps.hoc")
 
 proc run_act(){
     xopen ("act.ses")
@@ -66,29 +67,29 @@ proc run_loop(){
     xmax=(xf-xo)/dx
     for xind=0,xmax {
         fiber_diameter=xo+xind*dx
-        axon_diameter=0.66604*fiber_diameter-0.42879
-        nl=(fiber_diameter-axon_diameter)/(2*thickness_myelin)
-        passiveg=g_nl/(2*nl)
-        cm_my=2*eo*er/( fiber_diameter*log(fiber_diameter/axon_diameter))
-        passivecm=cm_my/(1+cm_my*fiber_diameter/(cm_node*axon_diameter))
-        c_nl=passivecm*(nl)
-        kg=kg_per_ch*num_k_chans/(PI*Lflut*axon_diameter*10^-8)
+        set_fiber_diameter_params()
 
-        // change nodal_diameter
-        yo=.8
-        dy=.25
-        yf=axon_diameter+dy*2
-        ymax=(yf-yo)/dy
-        for yind=0,ymax {
-            nodal_diameter=yo+yind*dy
-            nodal_diameter_inc=nodal_diameter*.32406*exp(-0.39509*nodal_diameter)*0.0
-            ratio=nodal_diameter/axon_diameter
-            nag=nag_per_chan*num_sod_chans/(PI*Lnode*nodal_diameter*10^-8)
+    // change nodal diameter
+    yo=.8
+    dy=.25
+    yf=axon_diameter+dy*2
+    ymax=(yf-yo)/dy
+    for yind=0,ymax {
+        nodal_diameter=yo+yind*dy
+        set_nodal_diameter_params()
 
-            // run and record velocity
-            run_and_record()
-        }
-    }
+    // change nodal length
+//    yo=.8
+//    dy=.25
+//    yf=axon_diameter+dy*2
+//    ymax=(yf-yo)/dy
+//    for yind=0,ymax {
+//        nodal_diameter=yo+yind*dy
+//        set_nodal_diameter_params()
+
+
+        run_and_record() // run and record velocity
+    }}}
 }
 
 

@@ -52,7 +52,7 @@ PARAMETER {
 	q10  = 2.3			: temperature sensitivity
 
 	v 		(mV)
-	dt		(ms)
+	dt		<ms></ms>
 	celsius		(degC)
 	vmin = -120	(mV)
 	vmax = 100	(mV)
