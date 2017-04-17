@@ -91,11 +91,5 @@ proc run_loop(){
     }}}
 }
 
-proc set_nodal_length_params(){
-    Lstin=Lsection-(Lnode+2*Lflut+2*Lmysa)
-    nag=nag_per_chan*num_sod_chans/(PI*Lnode*(nodal_diameter+nodal_diameter_inc)*10^-8) // ( 10^-8 ---> convert to /cm^2)
-    kg=kg_per_ch*num_k_chans/(PI*Lflut*axon_diameter*10^-8)
-}
-
 //run_act()
 run_loop()
