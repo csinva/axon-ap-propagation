@@ -91,5 +91,7 @@ proc run_loop(){
     }}}
 }
 
-//run_act()
-run_loop()
+Lnode = .0000001
+set_nodal_length_params()
+run_act()
+//run_loop()
