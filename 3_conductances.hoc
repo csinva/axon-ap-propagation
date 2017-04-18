@@ -1,3 +1,4 @@
+// add conductances based on params
 proc initialize(){
         vshift_na12 = -35 - (-30) -10  // negative shift of input voltage, high threshold  -30mV
         vshift_na16 = -35 - (-43) -10    // positive shift of input voltage, low threshold  -43mV

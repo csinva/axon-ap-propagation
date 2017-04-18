@@ -1,7 +1,7 @@
 // create the sections
 create node[Nnode],mysaleft[Nmysa],mysaright[Nmysa],flut[Nflut],stin[Nstin],soma,mysaextra[NmysaSec]
 // node - node = NODE
-// mysa - myelin sheath attachment = PARA (paranode)
+// mysa - myelin sheath attachment = PARA (paranode) - part that tapers
 // flut - fluted region = JUXTA (juxtaparanode) - has potassium
 // stin - stereotyped internode = INTER (internode)
 

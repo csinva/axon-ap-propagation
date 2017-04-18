@@ -5,6 +5,7 @@ objref rec_na[Nnode], rec_k[Nflut], rec_t
 objref f
 strdef s1
 
+// record spike times, Na flux, K flux at each node
 proc record_start(){
     for i=0,Nnode-1 {
         node[i] nc[i] = new NetCon(&v(0.5), null, -40, 0, 0)
@@ -63,8 +64,6 @@ func k_flux_node15(){
     }
     return k_flux*area_flut*1e-6
 }
-
-
 
 // totals
 func na_flux_tot(){

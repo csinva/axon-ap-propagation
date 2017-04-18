@@ -1,7 +1,6 @@
 nodal_diameter=.1
 fiber_diameter=20   // fiber diameter (outside of the fiber, includes the myelin)
 axon_diameter=0.66604*fiber_diameter-0.42879 // axon diameter (inside diameter, excludes the myelin)
-ratio=nodal_diameter/axon_diameter
 thickness_myelin=.018
 nl=(fiber_diameter-axon_diameter)/(2*thickness_myelin)
 eo=8.8541878178*10^-12*10000/.0001 //(  *10000 --> convert to mF/cm*1/cm)

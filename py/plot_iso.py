@@ -10,7 +10,7 @@ def plot_filter(x, y, filter="nodal_length", filter_value=1):
 
 nodal_lengths = [.6, 1, 1.4, 1.8]
 base_dir = "/Users/chandansingh/drive/asdf/research/act_potential"
-fname = base_dir + '/data/out.txt'
+fname = base_dir + '/data/nodal_diameter,nodal_length.txt'
 x = np.loadtxt(fname, skiprows=1)
 headers = np.genfromtxt(fname, dtype="str")[0, :]
 data = {}
