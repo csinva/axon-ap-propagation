@@ -1,6 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
-import plot_setup
+import setup
 
 
 def plot_filter(x, y, filter="nodal_length", filter_value=1):
