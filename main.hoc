@@ -23,7 +23,7 @@ proc run_act(){
     xopen ("act.ses")
     initialize()
     record_start()
-    stimul()
+    set_stim()
     run()
     save_currs("data/currs.txt")
     na_flux = na_flux_node15()
@@ -36,7 +36,7 @@ proc run_and_record(){
     // run simulation
     initialize()
     record_start()
-    stimul()
+    set_stim()
     run()
 
     // record ap timing at node[i] in apt[i]
@@ -92,7 +92,9 @@ proc run_loop(){
     }}}
 }
 
-Lnode = 1e-7
-set_nodal_length_params()
+//Lnode = 1e-7
+//set_nodal_length_params()
+istim  = .04 //nA //fires between .04 and .045
 run_act()
+
 //run_loop()
