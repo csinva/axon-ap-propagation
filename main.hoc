@@ -12,11 +12,11 @@ setup()
 
 // load other files
 xopen("1_params.hoc")
-xopen("2_geometry.hoc")
+xopen("2_connections.hoc")
 xopen("3_conductances.hoc")
 xopen("4_stim.hoc")
 xopen("5_record.hoc")
-xopen("param_sweeps.hoc")
+xopen("6_param_sweeps.hoc")
 
 // opens a gui, runs an action potential
 proc run_act(){
@@ -88,13 +88,29 @@ proc run_loop(){
         Lnode = zo+zind*dz
         set_nodal_length_params()
 
+    // change nodal length
+    xxo=1000
+    dxx=.2
+    xxf=2
+    xxmax=(xxf-xxo)/dxx
+    for xxind=0,xxmax {
+        Lsection = xxo+xxind*dxx
+        set_internodal_length_params()
+
     run_and_record() // run and record velocity
-    }}}
+    }}}}
+
 }
 
 //Lnode = 1e-7
 //set_nodal_length_params()
-istim  = .04 //nA //fires between .04 and .045
+//nodal_diameter = 1e-7
+//set_nodal_diameter_params()
+
+//istim  = .04 // fires between .04 and .045
+
+Lsection = 5650
+set_internodal_length_params()
 run_act()
 
 //run_loop()
