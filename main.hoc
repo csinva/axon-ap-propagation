@@ -63,8 +63,8 @@ proc run_loop(){
 
     // change fiber diameter
     xo=20.00
-    xf=20.00
     dx=.25
+    xf=20.00
     xmax=(xf-xo)/dx
     for xind=0,xmax {
         fiber_diameter=xo+xind*dx
@@ -88,10 +88,10 @@ proc run_loop(){
         Lnode = zo+zind*dz
         set_nodal_length_params()
 
-    // change nodal length
+    // change internodal length
     xxo=1000
     dxx=.2
-    xxf=2
+    xxf=xxo+2
     xxmax=(xxf-xxo)/dxx
     for xxind=0,xxmax {
         Lsection = xxo+xxind*dxx
@@ -109,8 +109,8 @@ proc run_loop(){
 
 //istim  = .04 // fires between .04 and .045
 
-Lsection = 5650
-set_internodal_length_params()
+//Lsection = 5650
+//set_internodal_length_params()
 run_act()
 
 //run_loop()
